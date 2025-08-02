@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import axios from "axios";
 export default function App() {
   return (
     <div>
@@ -10,23 +10,76 @@ export default function App() {
 }
 
 function Header() {
-  return <header>Affirmation Generator</header>;
+  return (
+    <header className="app-header">
+      <h4 className="title">Affirmation Generator</h4>
+      <p className="subtitle">Find the perfect words for your mood!</p>
+    </header>
+  );
 }
 
 function Mood() {
-  const [mood, setMood] = useState("");
+  const initialMood = "Select your mood";
+  const [mood, setMood] = useState(initialMood);
+  const [affirmation, setAffirmation] = useState("");
+  const [loading, setLoading] = useState(false);
 
+  const fetchAffirmation = async (mood) => {
+    setLoading(true);
+    setAffirmation("");
+    try {
+      const response = await axios.post(
+        "https://api.openai.com/v1/chat/completions",
+        {
+          model: "gpt-3.5-turbo",
+          messages: [
+            {
+              role: "user",
+              content: `Give me a unique, short and emotionally resonant affirmation for someone who is feeling ${mood}. Make it poetic but not too abstract. Vary your language and tone every time.`,
+            },
+          ],
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.REACT_APP_OPENAI_KEY}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const message = response.data.choices[0].message.content;
+      setAffirmation(message);
+    } catch (error) {
+      setAffirmation("Failed to fetch affirmation");
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
-    <div className="mood-container">
-      <label>Select your mood:</label>
-      <select className="mood-dropdown" value="mood" onChange={(e) => setMood(e.target.value)}>
-        <option value="happy">Happy</option>
-        <option value="stressed">Stressed</option>
-        <option value="anxious">Anxious</option>
-        <option value="tired">Tired</option>
-        <option value="motivated">Motivated</option>
-      </select>
-      <button className="generate-btn">Generate Affirmation</button>
+    <div className="main-content">
+      <div className="mood-container">
+        <label>How are you feeling:</label>
+        <select
+          className="mood-dropdown"
+          placeholder="Select your mood"
+          value={mood}
+          onChange={(e) => setMood(e.target.value)}
+        >
+          <option value="happy">Happy</option>
+          <option value="stressed">Stressed</option>
+          <option value="anxious">Anxious</option>
+          <option value="tired">Tired</option>
+          <option value="motivated">Motivated</option>
+        </select>
+        <button className="generate-btn" onClick={() => fetchAffirmation(mood)}>
+          Generate Affirmation
+        </button>
+      </div>
+      {loading ? (
+        <p className="loading-text">Loading ...</p>
+      ) : (
+        affirmation && <p className="affirmation">{affirmation}</p>
+      )}
     </div>
   );
 }
