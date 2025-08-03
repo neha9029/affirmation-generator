@@ -1,3 +1,5 @@
+AI-powered web app that delivers personalized affirmations based on your current mood. Built with React on the frontend and Node.js (Express) on the backend, it uses the OpenAI API to generate calming, poetic, and emotionally resonant affirmations in real time.
+
 ## 🚀 Quick Start
 
 Live demo - https://neha9029.github.io/affirmation-generator/
