@@ -24,30 +24,17 @@ function Mood() {
   const [affirmation, setAffirmation] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const API_URL = process.env.REACT_APP_API_URL;
+
   const fetchAffirmation = async (mood) => {
     setLoading(true);
     setAffirmation("");
     try {
-      const response = await axios.post(
-        "https://api.openai.com/v1/chat/completions",
-        {
-          model: "gpt-3.5-turbo",
-          messages: [
-            {
-              role: "user",
-              content: `Give me a unique, short and emotionally resonant affirmation for someone who is feeling ${mood}. Make it poetic but not too abstract. Vary your language and tone every time.`,
-            },
-          ],
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${process.env.REACT_APP_OPENAI_KEY}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const message = response.data.choices[0].message.content;
-      setAffirmation(message);
+      const response = await axios.post(`${API_URL}/generateAffirmation`, {
+        mood,
+      });
+
+      setAffirmation(response.data.message);
     } catch (error) {
       setAffirmation("Failed to fetch affirmation");
       console.error(error);
