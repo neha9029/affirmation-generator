@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/affirmation-generator/static/css/main.b27ab6a1.css",
+    "main.js": "/affirmation-generator/static/js/main.7cb5fb71.js",
+    "index.html": "/affirmation-generator/index.html",
+    "main.b27ab6a1.css.map": "/affirmation-generator/static/css/main.b27ab6a1.css.map",
+    "main.7cb5fb71.js.map": "/affirmation-generator/static/js/main.7cb5fb71.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b27ab6a1.css",
+    "static/js/main.7cb5fb71.js"
+  ]
+}
