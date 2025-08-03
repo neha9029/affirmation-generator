@@ -1,5 +1,7 @@
 ## 🚀 Quick Start
 
+Live demo - https://neha9029.github.io/affirmation-generator/
+
 ### 🖥️ 1. Clone the repository
 
 ```bash
